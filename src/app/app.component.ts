@@ -50,6 +50,11 @@ export class AppComponent implements OnInit {
     "ZAR"
   ];
   switch: boolean = false;
+
+  cases = {
+    labels: [],
+    datasets: [{ label: "First Datase", data: [] }]
+  };
   ngOnInit() {
     this.initForm();
     this.onChangeCurrency();
@@ -111,6 +116,22 @@ export class AppComponent implements OnInit {
     return date;
   }
   getHistoricalData(date, from, to) {
-    this.dataService.getHistorical(date, from, to);
+    this.dataService.getHistorical(date, from, to).subscribe((data: any) => {
+      console.log("TCL: AppComponent -> getHistoricalData -> data", data.rates);
+      // console.log(Object.keys(data.rates));
+      this.cases.labels = Object.keys(data.rates);
+      console.log(Object.values(data.rates[0]));
+      // this.cases.push(data.rates);
+      // console.log(
+      //   "TCL: AppComponent -> getHistoricalData -> this.cases",
+      //   this.cases
+      // );
+      // data.rates.forEach(element => {
+      //   console.log(
+      //     "TCL: AppComponent -> getHistoricalData -> element",
+      //     element
+      //   );
+      // });
+    });
   }
 }

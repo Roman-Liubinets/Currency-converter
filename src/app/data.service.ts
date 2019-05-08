@@ -14,12 +14,8 @@ export class DataService {
 
   getHistorical(date, from, to) {
     console.log("", from, to);
-    return this.http
-      .get(
-        `https://api.exchangeratesapi.io/history?start_at=2015-01-01&end_at=${date}&symbols=${from},${to}&base=${from}`
-      )
-      .subscribe((res: any) => {
-        console.log("TCL: DataService -> getHistorical -> res", res);
-      });
+    return this.http.get(
+      `https://api.exchangeratesapi.io/history?start_at=2015-01-01&end_at=${date}&symbols=${from},${to}&base=${from}`
+    );
   }
 }

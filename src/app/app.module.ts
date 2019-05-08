@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ChartModule } from "primeng/chart";
 
 import { AppComponent } from "./app.component";
 import { DataService } from "./data.service";
@@ -16,7 +17,8 @@ import { MaterialModule } from "./material.module";
     HttpClientModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ChartModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]
