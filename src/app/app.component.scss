@@ -3,15 +3,21 @@
   text-align: center;
 }
 .inputs {
-  display: flex;
-  justify-content: space-between;
   margin: 2% auto;
   width: 50%;
-  .from,
-  .to {
-    width: 45%;
-    .mat-form-field {
-      width: 100%;
+  form {
+    display: flex;
+    justify-content: space-between;
+    .from,
+    .to {
+      width: 45%;
+      .mat-form-field {
+        width: 100%;
+      }
+    }
+    .switch {
+      display: flex;
+      align-items: center;
     }
   }
 }

@@ -1,19 +1,43 @@
 <div class="header"><h2>Currency Converter</h2></div>
 <div class="inputs">
-  <div class="from">
-    <mat-form-field>
-      <mat-select> <mat-option></mat-option> </mat-select
-    ></mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Input" />
-    </mat-form-field>
-  </div>
-  <div class="to">
-    <mat-form-field>
-      <mat-select> <mat-option></mat-option> </mat-select
-    ></mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Input" />
-    </mat-form-field>
-  </div>
+  <form [formGroup]="form">
+    <div class="from">
+      <mat-form-field>
+        <mat-select formControlName="CurrencyFrom">
+          <mat-option *ngFor="let c of currency" [value]="c">{{
+            c
+          }}</mat-option></mat-select
+        ></mat-form-field
+      >
+      <mat-form-field>
+        <input
+          matInput
+          type="number"
+          placeholder="From"
+          formControlName="AmountFrom"
+        />
+      </mat-form-field>
+    </div>
+    <div class="switch">
+      <i class="fas fa-exchange-alt"></i>
+    </div>
+    <div class="to">
+      <mat-form-field>
+        <mat-select formControlName="CurrencyTo"
+          ><mat-option *ngFor="let c of currency" [value]="c">{{
+            c
+          }}</mat-option></mat-select
+        ></mat-form-field
+      >
+      <mat-form-field>
+        <input
+          matInput
+          type="number"
+          placeholder="To"
+          formControlName="AmountTo"
+          readonly
+        />
+      </mat-form-field>
+    </div>
+  </form>
 </div>
