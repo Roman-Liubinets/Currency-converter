@@ -8,7 +8,7 @@ export class DataService {
 
   getAmout(from, to) {
     return this.http.get(
-      `https://api.exchangeratesapi.io/latest?symbols=${from},${to}`
+      `https://api.exchangeratesapi.io/latest?symbols=${from},${to}&base=${from}`
     );
   }
 }

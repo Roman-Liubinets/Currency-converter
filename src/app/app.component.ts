@@ -49,6 +49,7 @@ export class AppComponent implements OnInit {
     "THB",
     "ZAR"
   ];
+  switch: boolean = false;
   ngOnInit() {
     this.initForm();
     this.onChangeCurrency();
@@ -75,19 +76,23 @@ export class AppComponent implements OnInit {
             this.form.get("CurrencyTo").value
           )
           .subscribe((data: any) => {
-            console.log(
-              "TCL: AppComponent -> onChangeCurrency -> data",
-              data.rates
-            );
             this.form
               .get("AmountTo")
               .patchValue(
-                data.rates[Object.keys(data.rates)[0]] *
+                data.rates[Object.keys(data.rates)[!this.switch ? 0 : 1]] *
                   this.form.get("AmountFrom").value,
                 { emitEvent: false }
               );
           });
       }
+    });
+  }
+  changeCurrency() {
+    const old_value = Object.assign({}, this.form.value);
+    this.form.patchValue({
+      CurrencyFrom: old_value.CurrencyTo,
+      CurrencyTo: old_value.CurrencyFrom,
+      AmountFrom: old_value.AmountTo
     });
   }
 }
