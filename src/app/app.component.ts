@@ -53,6 +53,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.onChangeCurrency();
+    this.toDayDate();
   }
   initForm() {
     this.form = this.fb.group({
@@ -84,6 +85,11 @@ export class AppComponent implements OnInit {
                 { emitEvent: false }
               );
           });
+        this.getHistoricalData(
+          this.toDayDate(),
+          this.form.get("CurrencyFrom").value,
+          this.form.get("CurrencyTo").value
+        );
       }
     });
   }
@@ -94,5 +100,17 @@ export class AppComponent implements OnInit {
       CurrencyTo: old_value.CurrencyFrom,
       AmountFrom: old_value.AmountTo
     });
+  }
+
+  toDayDate(): string {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, "0");
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const yyyy = today.getFullYear();
+    const date = yyyy + "-" + mm + "-" + dd;
+    return date;
+  }
+  getHistoricalData(date, from, to) {
+    this.dataService.getHistorical(date, from, to);
   }
 }
