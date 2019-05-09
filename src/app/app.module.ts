@@ -6,6 +6,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { CalendarModule } from 'primeng/calendar';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule, Actions } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { reducers, effects } from './store';
+import { metaReducers } from './store/reducers';
+
 import { AppComponent } from './app.component';
 import { DataService } from './data.service';
 import { GlobalShareService } from './share/share.service';
@@ -21,7 +27,13 @@ import { MaterialModule } from './material.module';
     FormsModule,
     ReactiveFormsModule,
     ChartModule,
-    CalendarModule
+    CalendarModule,
+    StoreModule.forRoot(reducers, { metaReducers }),
+    EffectsModule.forRoot([]),
+    EffectsModule.forFeature(effects),
+    StoreDevtoolsModule.instrument({
+      maxAge: 5
+    })
   ],
   providers: [DataService, GlobalShareService],
   bootstrap: [AppComponent]

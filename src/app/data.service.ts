@@ -6,9 +6,11 @@ import { map } from 'rxjs/operators';
 export class DataService {
   constructor(private http: HttpClient) {}
 
-  getAmout(from, to) {
+  getAmout(currencys) {
     return this.http.get(
-      `https://api.exchangeratesapi.io/latest?symbols=${from},${to}&base=${from}`
+      `https://api.exchangeratesapi.io/latest?symbols=${
+        currencys.haveCurrency
+      },${currencys.wantCurrency}&base=${currencys.haveCurrency}`
     );
   }
 

@@ -6,9 +6,14 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+import { Store } from '@ngrx/store';
+import * as fromStore from './store';
 
 import { GlobalShareService } from './share/share.service';
 import { Chart } from './model/chart.model';
+import { Currency } from './model/chart.model';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +24,8 @@ export class AppComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private fb: FormBuilder,
-    public shareService: GlobalShareService
+    public shareService: GlobalShareService,
+    private store: Store<fromStore.State>
   ) {}
   form: FormGroup;
   switch: boolean = false;
@@ -39,36 +45,40 @@ export class AppComponent implements OnInit {
   }
   initForm() {
     this.form = this.fb.group({
-      CurrencyFrom: [null],
-      CurrencyTo: [null],
-      AmountFrom: [null],
+      CurrencyFrom: [null, [Validators.required]],
+      CurrencyTo: [null, [Validators.required]],
+      AmountFrom: [null, [Validators.required]],
       AmountTo: [null],
       StartDate: [this.convertDate(this.startDate)],
-      EndDate: [this.convertDate()]
+      EndDate: [this.convertDate()],
+      switch: [false]
     });
   }
 
   onChangeCurrency() {
     this.form.valueChanges.subscribe(() => {
-      if (
-        (this.form.get('CurrencyFrom').value,
-        this.form.get('CurrencyTo').value,
-        this.form.get('AmountFrom').value)
-      ) {
-        this.dataService
-          .getAmout(
-            this.form.get('CurrencyFrom').value,
-            this.form.get('CurrencyTo').value
+      const currencys: Currency = {
+        haveCurrency: this.form.controls['CurrencyFrom'].value,
+        wantCurrency: this.form.controls['CurrencyTo'].value,
+        switchCase: this.switch
+      };
+      if (this.form.valid) {
+        this.store.dispatch(new fromStore.GetAmountRequest(currencys));
+        const subscribtion = this.store
+          .select<any>(fromStore.getAmountTo)
+          .pipe(
+            debounceTime(500),
+            distinctUntilChanged(),
+            map((amountTo: number) => {
+              this.form
+                .get('AmountTo')
+                .patchValue(amountTo * this.form.get('AmountFrom').value, {
+                  emitEvent: false
+                });
+              subscribtion.unsubscribe();
+            })
           )
-          .subscribe((data: any) => {
-            this.form
-              .get('AmountTo')
-              .patchValue(
-                data.rates[Object.keys(data.rates)[!this.switch ? 0 : 1]] *
-                  this.form.get('AmountFrom').value,
-                { emitEvent: false }
-              );
-          });
+          .subscribe();
         this.getHistoricalData(
           this.form.get('StartDate').value,
           this.form.get('EndDate').value,
