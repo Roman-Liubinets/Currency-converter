@@ -41,6 +41,36 @@
     </div>
   </form>
 </div>
-<div class="chart">
-  <p-chart type="line" *ngIf="showChart" [data]="cases"></p-chart>
+<div class="chart" *ngIf="showChart">
+  <!-- <div class="chart"> -->
+  <div class="chart__header">
+    <h2>Chart</h2>
+  </div>
+  <div class="chart__calendars">
+    <div class="chart__from">
+      <label>Start Date</label>
+      <p-calendar
+        yearRange="2014:2021"
+        [yearNavigator]="true"
+        [readonlyInput]="true"
+        dateFormat="yy/mm/dd"
+        [(ngModel)]="startDate"
+        (onSelect)="changeRange()"
+      ></p-calendar>
+    </div>
+    <div class="chart__to">
+      <label>End Date</label>
+      <p-calendar
+        yearRange="2014:2021"
+        [yearNavigator]="true"
+        [readonlyInput]="true"
+        dateFormat="yy/mm/dd"
+        [(ngModel)]="endDate"
+        (onSelect)="changeRange()"
+      ></p-calendar>
+    </div>
+  </div>
+  <div class="chart__graph">
+    <p-chart type="line" [data]="cases"></p-chart>
+  </div>
 </div>

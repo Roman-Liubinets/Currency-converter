@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { map } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class DataService {
@@ -12,10 +12,10 @@ export class DataService {
     );
   }
 
-  getHistorical(date, from, to) {
-    console.log("", from, to);
+  getHistorical(start_date, end_date, from, to) {
+    console.log('TCL: DataService', start_date, end_date);
     return this.http.get(
-      `https://api.exchangeratesapi.io/history?start_at=2015-01-01&end_at=${date}&symbols=${from},${to}&base=${from}`
+      `https://api.exchangeratesapi.io/history?start_at=${start_date}&end_at=${end_date}&symbols=${from},${to}&base=${from}`
     );
   }
 }

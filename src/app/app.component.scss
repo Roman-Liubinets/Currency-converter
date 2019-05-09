@@ -21,3 +21,27 @@
     }
   }
 }
+
+.chart {
+  &__header {
+    text-align: center;
+  }
+  &__calendars {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    margin: 0 auto;
+  }
+  &__from {
+    display: flex;
+    flex-direction: column;
+  }
+  &__to {
+    display: flex;
+    flex-direction: column;
+  }
+  &__graph {
+    width: 50%;
+    margin: 0 auto;
+  }
+}
