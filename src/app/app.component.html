@@ -4,7 +4,7 @@
     <div class="from">
       <mat-form-field>
         <mat-select formControlName="CurrencyFrom">
-          <mat-option *ngFor="let c of currency" [value]="c">{{
+          <mat-option *ngFor="let c of shareService.currency" [value]="c">{{
             c
           }}</mat-option></mat-select
         ></mat-form-field
@@ -24,7 +24,7 @@
     <div class="to">
       <mat-form-field>
         <mat-select formControlName="CurrencyTo"
-          ><mat-option *ngFor="let c of currency" [value]="c">{{
+          ><mat-option *ngFor="let c of shareService.currency" [value]="c">{{
             c
           }}</mat-option></mat-select
         ></mat-form-field
@@ -42,5 +42,5 @@
   </form>
 </div>
 <div class="chart">
-  <p-chart type="line" [data]="cases"></p-chart>
+  <p-chart type="line" *ngIf="showChart" [data]="cases"></p-chart>
 </div>

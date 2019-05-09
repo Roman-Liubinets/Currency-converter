@@ -7,6 +7,7 @@ import { ChartModule } from "primeng/chart";
 
 import { AppComponent } from "./app.component";
 import { DataService } from "./data.service";
+import { GlobalShareService } from "./share/share.service";
 import { MaterialModule } from "./material.module";
 
 @NgModule({
@@ -20,7 +21,7 @@ import { MaterialModule } from "./material.module";
     ReactiveFormsModule,
     ChartModule
   ],
-  providers: [DataService],
+  providers: [DataService, GlobalShareService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

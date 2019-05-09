@@ -7,53 +7,27 @@ import {
   Validators
 } from "@angular/forms";
 
+import { GlobalShareService } from "./share/share.service";
+import { Chart } from "./model/chart.model";
+
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements OnInit {
-  constructor(private dataService: DataService, private fb: FormBuilder) {}
+  constructor(
+    private dataService: DataService,
+    private fb: FormBuilder,
+    public shareService: GlobalShareService
+  ) {}
   form: FormGroup;
-  currency: string[] = [
-    "USD",
-    "JPY",
-    "BGN",
-    "CZK",
-    "DKK",
-    "GBP",
-    "HUF",
-    "PLN",
-    "RON",
-    "SEK",
-    "CHF",
-    "ISK",
-    "NOK",
-    "HRK",
-    "RUB",
-    "TRY",
-    "AUD",
-    "BRL",
-    "CAD",
-    "CNY",
-    "HKD",
-    "IDR",
-    "ILS",
-    "INR",
-    "KRW",
-    "MXN",
-    "MYR",
-    "NZD",
-    "PHP",
-    "SGD",
-    "THB",
-    "ZAR"
-  ];
   switch: boolean = false;
+  showChart: boolean = false;
 
-  cases = {
+  cases: Chart = {
     labels: [],
-    datasets: [{ label: "First Datase", data: [] }]
+    datasets: [{ label: "Amout", data: [] }]
   };
   ngOnInit() {
     this.initForm();
@@ -70,7 +44,7 @@ export class AppComponent implements OnInit {
   }
 
   onChangeCurrency() {
-    this.form.valueChanges.subscribe(value => {
+    this.form.valueChanges.subscribe(() => {
       if (
         (this.form.get("CurrencyFrom").value,
         this.form.get("CurrencyTo").value,
@@ -99,12 +73,18 @@ export class AppComponent implements OnInit {
     });
   }
   changeCurrency() {
+    this.showChart = false;
     const old_value = Object.assign({}, this.form.value);
     this.form.patchValue({
       CurrencyFrom: old_value.CurrencyTo,
       CurrencyTo: old_value.CurrencyFrom,
       AmountFrom: old_value.AmountTo
     });
+    this.getHistoricalData(
+      this.toDayDate(),
+      this.form.get("CurrencyFrom").value,
+      this.form.get("CurrencyTo").value
+    );
   }
 
   toDayDate(): string {
@@ -117,21 +97,17 @@ export class AppComponent implements OnInit {
   }
   getHistoricalData(date, from, to) {
     this.dataService.getHistorical(date, from, to).subscribe((data: any) => {
-      console.log("TCL: AppComponent -> getHistoricalData -> data", data.rates);
-      // console.log(Object.keys(data.rates));
-      this.cases.labels = Object.keys(data.rates);
-      console.log(Object.values(data.rates[0]));
-      // this.cases.push(data.rates);
-      // console.log(
-      //   "TCL: AppComponent -> getHistoricalData -> this.cases",
-      //   this.cases
-      // );
-      // data.rates.forEach(element => {
-      //   console.log(
-      //     "TCL: AppComponent -> getHistoricalData -> element",
-      //     element
-      //   );
-      // });
+      const labels = Object.keys(data.rates).sort();
+      this.cases.labels = labels.filter((item, index) => index % 2 === 0);
+      const values = Object.values(data.rates);
+      const allDate = values.map(
+        items => Object.entries(items)[!this.switch ? 0 : 1][1]
+      );
+      const filterDate = allDate.filter((item, index) => index % 2 === 0);
+      this.cases.datasets.forEach(elemet => {
+        elemet.data = filterDate;
+      });
+      this.showChart = true;
     });
   }
 }
