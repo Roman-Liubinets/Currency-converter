@@ -1,5 +1,5 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   MatCheckboxModule,
   MatDatepickerModule,
@@ -15,7 +15,7 @@ import {
   MatIconModule,
   MatMenuModule,
   MatSelectModule
-} from "@angular/material";
+} from '@angular/material';
 const material = [
   MatCheckboxModule,
   MatDatepickerModule,

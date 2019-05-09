@@ -1,12 +1,15 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { NgModule } from "@angular/core";
-import { HttpClientModule } from "@angular/common/http";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChartModule } from 'primeng/chart';
+import { CalendarModule } from 'primeng/calendar';
 
-import { AppComponent } from "./app.component";
-import { DataService } from "./data.service";
-import { MaterialModule } from "./material.module";
+import { AppComponent } from './app.component';
+import { DataService } from './data.service';
+import { GlobalShareService } from './share/share.service';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,9 +19,11 @@ import { MaterialModule } from "./material.module";
     HttpClientModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ChartModule,
+    CalendarModule
   ],
-  providers: [DataService],
+  providers: [DataService, GlobalShareService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

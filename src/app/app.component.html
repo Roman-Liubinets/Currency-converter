@@ -4,7 +4,7 @@
     <div class="from">
       <mat-form-field>
         <mat-select formControlName="CurrencyFrom">
-          <mat-option *ngFor="let c of currency" [value]="c">{{
+          <mat-option *ngFor="let c of shareService.currency" [value]="c">{{
             c
           }}</mat-option></mat-select
         ></mat-form-field
@@ -24,7 +24,7 @@
     <div class="to">
       <mat-form-field>
         <mat-select formControlName="CurrencyTo"
-          ><mat-option *ngFor="let c of currency" [value]="c">{{
+          ><mat-option *ngFor="let c of shareService.currency" [value]="c">{{
             c
           }}</mat-option></mat-select
         ></mat-form-field
@@ -40,4 +40,37 @@
       </mat-form-field>
     </div>
   </form>
+</div>
+<div class="chart" *ngIf="showChart">
+  <!-- <div class="chart"> -->
+  <div class="chart__header">
+    <h2>Chart</h2>
+  </div>
+  <div class="chart__calendars">
+    <div class="chart__from">
+      <label>Start Date</label>
+      <p-calendar
+        yearRange="2014:2021"
+        [yearNavigator]="true"
+        [readonlyInput]="true"
+        dateFormat="yy/mm/dd"
+        [(ngModel)]="startDate"
+        (onSelect)="changeRange()"
+      ></p-calendar>
+    </div>
+    <div class="chart__to">
+      <label>End Date</label>
+      <p-calendar
+        yearRange="2014:2021"
+        [yearNavigator]="true"
+        [readonlyInput]="true"
+        dateFormat="yy/mm/dd"
+        [(ngModel)]="endDate"
+        (onSelect)="changeRange()"
+      ></p-calendar>
+    </div>
+  </div>
+  <div class="chart__graph">
+    <p-chart type="line" [data]="cases"></p-chart>
+  </div>
 </div>
