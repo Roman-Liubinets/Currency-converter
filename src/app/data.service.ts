@@ -14,10 +14,13 @@ export class DataService {
     );
   }
 
-  getHistorical(start_date, end_date, from, to) {
-    console.log('TCL: DataService', start_date, end_date);
+  getHistorical(data) {
     return this.http.get(
-      `https://api.exchangeratesapi.io/history?start_at=${start_date}&end_at=${end_date}&symbols=${from},${to}&base=${from}`
+      `https://api.exchangeratesapi.io/history?start_at=${
+        data.startDate
+      }&end_at=${data.endDate}&symbols=${data.haveCurrency},${
+        data.wantCurrency
+      }&base=${data.haveCurrency}`
     );
   }
 }

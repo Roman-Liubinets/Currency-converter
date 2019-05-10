@@ -12,8 +12,7 @@ import { Store } from '@ngrx/store';
 import * as fromStore from './store';
 
 import { GlobalShareService } from './share/share.service';
-import { Chart } from './model/chart.model';
-import { Currency } from './model/chart.model';
+import { Chart, HistoricalRequest, Currency } from './model/chart.model';
 
 @Component({
   selector: 'app-root',
@@ -38,10 +37,11 @@ export class AppComponent implements OnInit {
 
   startDate = new Date('2015-01-01');
   endDate = new Date();
+
   ngOnInit() {
     this.initForm();
     this.onChangeCurrency();
-    // this.toDayDate();
+    this.getChartData();
   }
   initForm() {
     this.form = this.fb.group({
@@ -64,7 +64,7 @@ export class AppComponent implements OnInit {
       };
       if (this.form.valid) {
         this.store.dispatch(new fromStore.GetAmountRequest(currencys));
-        const subscribtion = this.store
+        const subscription = this.store
           .select<any>(fromStore.getAmountTo)
           .pipe(
             debounceTime(500),
@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
                 .patchValue(amountTo * this.form.get('AmountFrom').value, {
                   emitEvent: false
                 });
-              subscribtion.unsubscribe();
+              subscription.unsubscribe();
             })
           )
           .subscribe();
@@ -89,19 +89,22 @@ export class AppComponent implements OnInit {
     });
   }
   changeCurrency() {
-    this.showChart = false;
-    const old_value = Object.assign({}, this.form.value);
-    this.form.patchValue({
-      CurrencyFrom: old_value.CurrencyTo,
-      CurrencyTo: old_value.CurrencyFrom,
-      AmountFrom: old_value.AmountTo
-    });
-    this.getHistoricalData(
-      this.form.get('StartDate').value,
-      this.form.get('EndDate').value,
-      this.form.get('CurrencyFrom').value,
-      this.form.get('CurrencyTo').value
-    );
+    if (this.form.valid) {
+      this.switch = !this.switch;
+      this.showChart = false;
+      const old_value = Object.assign({}, this.form.value);
+      this.form.patchValue({
+        CurrencyFrom: old_value.CurrencyTo,
+        CurrencyTo: old_value.CurrencyFrom,
+        AmountFrom: old_value.AmountTo
+      });
+      this.getHistoricalData(
+        this.form.get('StartDate').value,
+        this.form.get('EndDate').value,
+        this.form.get('CurrencyFrom').value,
+        this.form.get('CurrencyTo').value
+      );
+    }
   }
 
   convertDate(date_value?): string {
@@ -113,21 +116,16 @@ export class AppComponent implements OnInit {
     return date;
   }
   getHistoricalData(start_date, end_date, from, to) {
-    this.dataService
-      .getHistorical(start_date, end_date, from, to)
-      .subscribe((data: any) => {
-        const labels = Object.keys(data.rates).sort();
-        this.cases.labels = labels.filter((item, index) => index % 2 === 0);
-        const values = Object.values(data.rates);
-        const allDate = values.map(
-          items => Object.entries(items)[!this.switch ? 0 : 1][1]
-        );
-        const filterDate = allDate.filter((item, index) => index % 2 === 0);
-        this.cases.datasets.forEach(elemet => {
-          elemet.data = filterDate;
-        });
-        this.showChart = true;
-      });
+    const historicalRequest: HistoricalRequest = {
+      startDate: start_date,
+      endDate: end_date,
+      haveCurrency: from,
+      wantCurrency: to,
+      switchCase: this.switch
+    };
+    this.store.dispatch(
+      new fromStore.GetHistoricalDataReques(historicalRequest)
+    );
   }
   changeRange() {
     this.showChart = false;
@@ -140,5 +138,20 @@ export class AppComponent implements OnInit {
       this.form.get('CurrencyFrom').value,
       this.form.get('CurrencyTo').value
     );
+  }
+
+  getChartData() {
+    this.store
+      .select<any>(fromStore.chartData)
+      .pipe(
+        distinctUntilChanged(),
+        map((data: any) => {
+          if (data.labels) {
+            this.cases = data;
+            this.showChart = true;
+          }
+        })
+      )
+      .subscribe();
   }
 }

@@ -29,6 +29,26 @@ export class ConverterEffects {
   );
 
   @Effect()
+  getHistoricalData$ = this.actions$.pipe(
+    ofType(fromActions.GET_HISTORICAL_DATA),
+    map((action: fromActions.GetHistoricalDataReques) => action.payload),
+    switchMap((data: any) => {
+      return this.service.getHistorical(data).pipe(
+        map(
+          (response: any) =>
+            new fromActions.GetHistoricalDataRequesSuccess(
+              response,
+              data.switchCase
+            )
+        ),
+        catchError(error =>
+          of(new fromActions.GetHistoricalDataRequesFail(error))
+        )
+      );
+    })
+  );
+
+  @Effect()
   switchCase$ = this.actions$.pipe(
     ofType(fromActions.SWITCH_AMOUNT),
     map((action: any) => new fromActions.SwitchAmountSuccess(action.payload))

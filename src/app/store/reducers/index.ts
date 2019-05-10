@@ -27,4 +27,5 @@ export const metaReducers: MetaReducer<State>[] = [logger];
 export const getDataState = createFeatureSelector<fromReducer.State>('data');
 export const getAmountTo = createSelector(getDataState, fromReducer.getAmoutTo);
 export const switchCase = createSelector(getDataState, fromReducer.switchCase);
+export const chartData = createSelector(getDataState, fromReducer.chartData);
 export const loaded = createSelector(getDataState, fromReducer.loaded);
