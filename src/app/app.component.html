@@ -48,25 +48,37 @@
   <div class="chart__calendars">
     <div class="chart__from">
       <label>Start Date</label>
-      <p-calendar
+      <mat-form-field>
+        <input matInput [matDatepicker]="start" [(ngModel)]="startDate"
+        (dateChange)="changeRange()" placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+        <mat-datepicker #start></mat-datepicker>
+      </mat-form-field>
+      <!-- <p-calendar
         yearRange="2014:2021"
         [yearNavigator]="true"
         [readonlyInput]="true"
         dateFormat="yy/mm/dd"
         [(ngModel)]="startDate"
         (onSelect)="changeRange()"
-      ></p-calendar>
+      ></p-calendar> -->
     </div>
     <div class="chart__to">
       <label>End Date</label>
-      <p-calendar
+      <mat-form-field>
+        <input matInput [matDatepicker]="end" [(ngModel)]="endDate"
+        (dateChange)="changeRange()" placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+        <mat-datepicker #end></mat-datepicker>
+      </mat-form-field>
+      <!-- <p-calendar
         yearRange="2014:2021"
         [yearNavigator]="true"
         [readonlyInput]="true"
         dateFormat="yy/mm/dd"
         [(ngModel)]="endDate"
         (onSelect)="changeRange()"
-      ></p-calendar>
+      ></p-calendar> -->
     </div>
   </div>
   <div class="chart__graph">
