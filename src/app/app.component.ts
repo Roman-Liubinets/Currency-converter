@@ -130,6 +130,7 @@ export class AppComponent implements OnInit {
   changeRange() {
     this.showChart = false;
     this.form.patchValue({
+      StartDate: this.convertDate(this.startDate),
       EndDate: this.convertDate(this.endDate)
     });
     this.getHistoricalData(
